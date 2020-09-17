@@ -1,12 +1,16 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useForm } from '../../hooks/useForm'
-import { useDispatch } from 'react-redux'
-import { startLoginEmailPassword, startGoogleLogin } from '../../action/auth'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useForm } from '../../hooks/useForm';
+import { useDispatch, useSelector } from 'react-redux';
+import { startLoginEmailPassword, startGoogleLogin } from '../../action/auth';
+import validator from 'validator';
+
 
 const LoginScreen = () => {
 
     const dispatch = useDispatch()
+    
+    const {loading} = useSelector(store => store.ui)
 
     const [formValues, handleInputChange] = useForm({
         email: 'nando@gmail.com',
@@ -17,12 +21,26 @@ const LoginScreen = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-
-        dispatch(startLoginEmailPassword(email, password));
+        
+        if(isFormValid()){
+            dispatch(startLoginEmailPassword(email, password));            
+        }
     }
-
+    
     const handleGoogleLogin = (e) => {
         dispatch(startGoogleLogin());
+    }
+    
+    const isFormValid = () =>{
+        
+        if(password.trim().length === 0 ) {
+            // dispatch(setError('Introduzca nombre'))
+            return false;
+        }else if (!validator.isEmail(email)){
+            // dispatch(setError('Email is not valid'))
+            return false;
+        }
+        return true;
     }
 
     return (
@@ -53,6 +71,7 @@ const LoginScreen = () => {
                     <button 
                         type="submit"
                         className="btn btn-primary btn-block" 
+                        disabled={loading}
                         >Login</button>
 
                     <hr />

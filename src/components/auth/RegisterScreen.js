@@ -4,7 +4,6 @@ import { useForm } from '../../hooks/useForm'
 import validator from 'validator';
 import { setError, removeError } from '../../action/ui';
 import { useDispatch, useSelector } from 'react-redux'
-import store from '../../store/store';
 import { startRegisterWithEmailPasswordName } from '../../action/auth';
 
 
