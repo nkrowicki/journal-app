@@ -1,30 +1,54 @@
-import React from 'react'
+import React from 'react';
+import moment from 'moment';
+import 'moment/locale/es';
+import { useDispatch } from 'react-redux';
+import { activeNote } from '../../action/notes';
 
-const JournalEntry = () => {
+const JournalEntry = ({id, date, title, body, url}) => {
+
+    const dispatch = useDispatch();
+
+    const noteDate = moment(date);
+    
+    const handleEntryClick = () => {
+        
+        dispatch(activeNote(id, {
+            date,
+            title,
+            body,
+            url
+        }))
+    }
+
     return (
-        <div className="journal__entry pointer">
-            <div 
-                className="journal__entry-picture"
-                style={{
-                    
-                    backgroundSize: 'cover',
-                    backgroundImage:'url(https://consumer-res.huawei.com/etc/designs/huawei-cbg-site/clientlib-campaign-v4/common-v4/images/logo.png)'
-                }}
-            >   
-            </div>
+        <div 
+            className="journal__entry pointer animate__animated animate__fadeIn animate__faster"
+            onClick={handleEntryClick}
+        >
+            {url && 
+                <div 
+                    className="journal__entry-picture"
+                    style={{
+                        
+                        backgroundSize: 'cover',
+                        backgroundImage:`url(${url})`
+                    }}
+                    >   
+                </div>
+            }
 
             <div className="journal__entry-body">
                 <p className="journal__entry-title">
-                    Un nuevo dia
+                    {title}
                 </p>
                 <p className="journal__entry-content">
-                    Sqwemioq we qwemq weqw twreewr wer wer wer 
+                    {body}
                 </p>
             </div>
 
             <div className="journal__entry-date-box">
-                <span>Monday</span>
-                <h4>28</h4>
+                <span>{noteDate.format('dddd')}</span>
+                <h4>{noteDate.format('d')}</h4>
             </div>
 
         </div>
